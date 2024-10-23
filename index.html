@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unique Path and Shareable Link Resume Builder</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Playwrite+GB+S:ital,wght@0,100..400;1,100..400&display=swap"
+    rel="stylesheet" />
+</head>
+
+<body>
+  <form id="resume-form">
+    <h2><i class="fa-regular fa-user"></i> Personal Information</h2>
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required />
+
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required />
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required />
+
+    <label for="contact">Contact:</label>
+    <input type="text" id="contact" name="contact" required />
+
+    <label for="profilePic">Profile Picture:</label>
+    <input type="file" id="profilePic" name="profilePic" accept="image/*" />
+
+    <h2><i class="fa-solid fa-graduation-cap"></i> Education</h2>
+    <label for="degree">Degree:</label>
+    <input type="text" id="degree" name="degree" required />
+
+    <label for="institution">Institution:</label>
+    <input type="text" id="institution" name="institution" required />
+
+    <label for="gradYear">Graduation Year:</label>
+    <input type="text" id="gradYear" name="gradYear" required />
+
+    <h2><i class="fa-solid fa-gear"></i> Skills</h2>
+    <label for="skills">Skills (comma separated):</label>
+    <input type="text" id="skills" name="skills" required />
+
+    <button type="submit">Generate Resume</button>
+  </form>
+
+  <!-- Resume will be dynamically generated here -->
+  <div id="resume" style="display: none;"></div>
+
+  <!-- Section for the shareable link and download option -->
+  <div id="shareable-link-container" style="display: none">
+    <h2> <i class="fa-solid fa-link"></i> Shareable Link</h2>
+    <p>Here is your unique link to view or edit your resume:</p>
+    <a href="#" id="shareable-link" target="_blank"></a>
+    <button id="download-pdf" type="button">Download as PDF</button>
+  </div>
+
+  <script type="module" src="./dist/script.js"></script>
+</body>
+
+</html>
