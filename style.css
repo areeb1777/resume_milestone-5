@@ -36,6 +36,12 @@ h2 {
   font-weight: bold;
 }
 
+h2:hover {
+  color: #ff5722; /* Change color on hover */
+  transform: scale(1.02); /* Slightly increase size on hover */
+  cursor: pointer;
+}
+
 label {
   font-size: 1rem;
   color: #333;
@@ -59,7 +65,8 @@ input[type="file"] {
 
 input[type="text"]:focus,
 input[type="email"]:focus {
-  border-color: #1f4037;
+  border-color: #25ffc5;
+  width: 102%;
   outline: none;
 }
 
