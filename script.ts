@@ -1,4 +1,4 @@
-// Form and resume container elements
+// Form, resume container, and profile preview elements
 const form = document.getElementById("resume-form") as HTMLFormElement;
 const resumeContainer = document.getElementById("resume") as HTMLDivElement;
 const shareableLinkContainer = document.getElementById(
@@ -10,14 +10,31 @@ const shareableLinkElement = document.getElementById(
 const downloadPdfButton = document.getElementById(
   "download-pdf"
 ) as HTMLButtonElement;
+const profilePicInput = document.getElementById(
+  "profilePic"
+) as HTMLInputElement;
+const profilePreview = document.getElementById(
+  "profilePreview"
+) as HTMLImageElement;
 
-// Handle form submission
+// Profile picture preview on file selection
+profilePicInput.addEventListener("change", () => {
+  const profilePicFile = profilePicInput.files?.[0];
+  if (profilePicFile) {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      profilePreview.src = event.target?.result as string;
+      profilePreview.style.display = "block"; // Show the preview image
+    };
+    reader.readAsDataURL(profilePicFile); // Read the file as Data URL
+  }
+});
+
+// Form submit event listener
 form.addEventListener("submit", (e) => {
   e.preventDefault();
 
   // Collect form values
-  const username = (document.getElementById("username") as HTMLInputElement)
-    .value;
   const name = (document.getElementById("name") as HTMLInputElement).value;
   const email = (document.getElementById("email") as HTMLInputElement).value;
   const contact = (document.getElementById("contact") as HTMLInputElement)
@@ -32,111 +49,56 @@ form.addEventListener("submit", (e) => {
     document.getElementById("skills") as HTMLInputElement
   ).value.split(",");
 
-  // Save form data in localStorage
-  const resumeData = {
-    name,
-    email,
-    contact,
-    degree,
-    institution,
-    gradYear,
-    skills,
-  };
-  localStorage.setItem(username, JSON.stringify(resumeData));
-
-  // Handle profile picture
-  const profilePicInput = document.getElementById(
-    "profilePic"
-  ) as HTMLInputElement;
+  // Check if profile picture file is available and add to resume
   const profilePicFile = profilePicInput.files?.[0];
-
   if (profilePicFile) {
     const reader = new FileReader();
-
-    // When the file is read successfully
     reader.onload = (event) => {
       const profilePicURL = event.target?.result as string;
 
       // Dynamically update the resume with form data and profile picture
-      renderResume(
-        name,
-        email,
-        contact,
-        degree,
-        institution,
-        gradYear,
-        skills,
-        profilePicURL
-      );
+      resumeContainer.innerHTML = `
+        <div class="profile">
+          <img src="${profilePicURL}" alt="Profile Picture" class="profile-pic">
+          <h1>${name}</h1>
+          <p>${email} | ${contact}</p>
+        </div>
+        
+        <div class="education">
+          <h2> <i class="fa-solid fa-graduation-cap"></i> Education</h2>
+          <p>${degree}, ${institution} (${gradYear})</p>
+        </div>
+        
+        <div class="skills">
+          <h2> <i class="fa-solid fa-gear"></i> Skills</h2>
+          <ul>${skills.map((skill) => `<li>${skill.trim()}</li>`).join("")}</ul>
+        </div>
+      `;
+      resumeContainer.style.display = "block";
     };
-
-    // Read the profile picture file as a Data URL
     reader.readAsDataURL(profilePicFile);
   } else {
-    // If no profile picture is selected, display resume without it
-    renderResume(
-      name,
-      email,
-      contact,
-      degree,
-      institution,
-      gradYear,
-      skills,
-      null
-    );
+    // Display resume without profile picture if not selected
+    resumeContainer.innerHTML = `
+      <div class="profile">
+        <h1>${name}</h1>
+        <p>${email} | ${contact}</p>
+      </div>
+      
+      <div class="education">
+        <h2> <i class="fa-solid fa-graduation-cap"></i> Education</h2>
+        <p>${degree}, ${institution} (${gradYear})</p>
+      </div>
+      
+      <div class="skills">
+        <h2> <i class="fa-solid fa-gear"></i> Skills</h2>
+        <ul>${skills.map((skill) => `<li>${skill.trim()}</li>`).join("")}</ul>
+      </div>
+    `;
+    resumeContainer.style.display = "block";
+    makeSectionsEditable();
   }
-
-  // Generate a shareable URL based on username
-  const shareableURL = `${window.location.origin}?username=${encodeURIComponent(
-    username
-  )}`;
-
-  // Display the shareable link
-  shareableLinkContainer.style.display = "block";
-  shareableLinkElement.href = shareableURL;
-  shareableLinkElement.textContent = shareableURL;
 });
-
-// Function to render the resume content
-function renderResume(
-  name: string,
-  email: string,
-  contact: string,
-  degree: string,
-  institution: string,
-  gradYear: string,
-  skills: string[],
-  profilePicURL: string | null
-) {
-  resumeContainer.innerHTML = `
-  <div class="profile">
-  ${
-    profilePicURL
-      ? `<img src="${profilePicURL}" alt="Profile Picture" class="profile-pic">`
-      : ""
-  }
-  <h1 contenteditable="true">${name}</h1>
-  <p contenteditable="true">${email} | ${contact}</p>
-  </div>
-  
-  <div class="education">
-  <h2><i class="fa-solid fa-graduation-cap"></i> Education</h2>
-  <p contenteditable="true">${degree}, ${institution} (${gradYear})</p>
-  </div>
-  
-  <div class="skills">
-  <h2><i class="fa-solid fa-gear"></i> Skills</h2>
-  <ul>${skills
-    .map((skill) => `<li contenteditable="true">${skill.trim()}</li>`)
-    .join("")}</ul>
-  </div>
-  `;
-  // Display the resume
-  resumeContainer.style.display = "block";
-
-  // Make sections editable
-  makeSectionsEditable();
-}
 
 // Function to enable contenteditable for resume sections
 function makeSectionsEditable() {

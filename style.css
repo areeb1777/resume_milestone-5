@@ -136,6 +136,13 @@ button[type="submit"]:hover {
   color: #777;
 }
 
+#profilePreview {
+  display: none;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
 /* Education and Skills section */
 h2 {
   color: #00bfa6;
